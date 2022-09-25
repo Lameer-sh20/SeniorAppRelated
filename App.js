@@ -3,8 +3,10 @@ import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import Home from './Screens/Home';
+import Camera from './Screens/Camera';
 import Posts from './Screens/Posts';
+import Page from './Screens/Page';
+import ProductScanRNCamera from './Screens/ProductScanRNCamera';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,8 +15,24 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Home"
-          component={Home}
+          name="ProductScanRNCamera"
+          component={ProductScanRNCamera}
+          options={{headerShown: false}}
+        />
+        {/*  
+        <Stack.Screen
+          name="Camera"
+          component={Camera}
+          options={{headerShown: false}}
+        />*/}
+        <Stack.Screen
+          name="Page"
+          component={Page}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Posts"
+          component={Posts}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

@@ -1,33 +1,84 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, Image, Text, View} from 'react-native';
+import {TouchableOpacity, Image, Text, View, Alert} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class ProductScanRNCamera extends Component {
-  async saveBarcode({text}) {
-    try {
-      const barcode = JSON.stringify({
-        barcode: text,
-      });
-      //await AsyncStorage.setItem('UserData', JSON.stringify(user));
-      await AsyncStorage.setItem('Barcode', barcode);
-      //console.warn('account created successfully!');
-      //navigation.navigate('VerficationPage');
-    } catch (error) {
-      console.warn(error);
-    }
-  }
+  // saveBarcode = () => {
+  //   try {
+  //     const barcode = JSON.stringify({
+  //       barcode: this.state.bar,
+  //       storeId: this.state.store,
+  //     });
+  //     //await AsyncStorage.setItem('UserData', JSON.stringify(user));
+  //     AsyncStorage.setItem('Barcode', barcode);
+  //     //console.warn('account created successfully!');
+  //     //this.props.navigation.navigate('Page');
+  //   } catch (error) {
+  //     console.warn(error);
+  //   }
+  // };
+
+  // createAlert = () => Alert.alert('data scaaned', this.state.bar);
+
+  // async submitData() {
+  //   console.log('hbguygy');
+  //   try {
+  //     await fetch('http://10.0.2.2:3000/product/FindProductByBarcode', {
+  //       method: 'POST',
+  //       headers: {
+  //         Accept: 'application/json',
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         barcodeNum: '6164001011534',
+  //         storeId: '2',
+  //       }),
+  //     })
+  //       .then(response => response.json())
+  //       .then(res => {
+  //         console.log('jhfjgfjfffgjfjjaf');
+  //         console.log(res);
+  //       })
+  //       .catch(error => {
+  //         console.error('Error inside:', error);
+  //       });
+  //   } catch (e) {
+  //     console.warn('Error all:', e);
+  //   }
+  // }
+
+  // async getData() {
+  //   console.log('getdata');
+  //   try {
+  //     const value = await AsyncStorage.getItem('Barcode');
+  //     if (value !== null) {
+  //       console.warn('data from storage', value);
+  //     }
+  //   } catch (e) {
+  //     console.warn(e);
+  //   }
+  // }
 
   constructor(props) {
     super(props);
     this.camera = null;
     this.barcodeCodes = [];
+    //this.par = '';
 
     this.state = {
       camera: {
         type: RNCamera.Constants.Type.back,
         flashMode: RNCamera.Constants.FlashMode.auto,
       },
+      // bar: null,
+      // store: null,
+      // data: '',
+
+      // barcode: {
+      //   barcodeNum: 6009188002213,
+      //   storeId: 2,
+      // },
     };
   }
   //http://localhost:3000/product/FindProductByBarcode
@@ -42,45 +93,14 @@ class ProductScanRNCamera extends Component {
       console.warn('onBarCodeRead call');
       console.log('lenght is', this.barcodeCodes.length);
       if (this.barcodeCodes.length == 1) {
-        //this.saveBarcode(1234);
         console.log('saved');
-        //console.log('dfhdhdh');
-        //this.props.navigation.navigate('Page');
-        await fetch('http://10.0.2.2:3000/product/FindProductByBarcode', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            barcodeNum: 6009188002213,
-            storeId: 2,
-          }),
-        })
-          .then(response => response.json())
-          .then(res => {
-            console.log('jhfjgfjfffgjfjjaf');
-            console.log(res);
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
-        // fetch('http://localhost:3000/product/FindProductByBarcode', {
-        //   method: 'POST', // or 'PUT'
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //   },
-        //   body: JSON.stringify({barcodeNum: 6009188002213, storeId: 2}),
-        // })
-        //   .then(data => {
-        //     console.log('dfdhdfhdf');
-        //     console.log('respond is:', data);
-        //   })
-        //   .catch(error => {
-        //     console.error('Error:', error);
-        //   });
-        //Alert.alert('Make login');
-        console.log('jhfjaf');
+        console.log('barcode is', scanResult.data);
+        AsyncStorage.setItem('Barcode', scanResult.data);
+        //this.setState({bar: scanResult.data});
+        //this.setState({store: 1});
+        //this.saveBarcode();
+        this.props.navigation.navigate('Page');
+        //console.log('jhfjaf');
       }
     }
     return;
@@ -109,6 +129,7 @@ class ProductScanRNCamera extends Component {
   }
 
   render() {
+    const {num} = this.props;
     return (
       <View style={styles.container}>
         <RNCamera
@@ -121,20 +142,33 @@ class ProductScanRNCamera extends Component {
           onBarCodeRead={this.onBarCodeRead.bind(this)}
           onFocusChanged={() => {}}
           onZoomChanged={() => {}}
-          permissionDialogTitle={'Permission to use camera'}
-          permissionDialogMessage={
-            'We need your permission to use your camera phone'
-          }
           style={styles.preview}
           type={this.state.camera.type}
         />
         <View style={[styles.overlay, styles.topOverlay]}>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Page')}>
+          {/* <TouchableOpacity onPress={this.saveBarcode}>
             <Image
               source={require('../assets/Images/back-icon.png')}
               style={styles.image}
             />
+          </TouchableOpacity> */}
+          <TouchableOpacity onPress={'...'}>
+            <Image
+              source={require('../assets/Images/back-icon.png')}
+              style={styles.image}
+            />
+            <Text>saved is{num}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.overlay, styles.bottomOverlay]}>
+          {/* <TouchableOpacity onPress={this.saveBarcode}>
+            <Image
+              source={require('../assets/Images/back-icon.png')}
+              style={styles.image}
+            />
+          </TouchableOpacity> */}
+          <TouchableOpacity onPress={this.getData}>
+            <Text>snap</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -22,10 +22,10 @@ function Page() {
       // error reading value
     }
   };
+
   const showAlert = () => {
     Alert.alert(barcodeNum, storeId);
   };
-
   const submitData = () => {
     console.warn('in submitt data');
     fetch('http://10.0.2.2:3000/product/FindProductByBarcode', {
@@ -48,7 +48,7 @@ function Page() {
   return (
     <View>
       {/** in onpress put showAlert to see barcode and store id, submitData to connect to backend */}
-      <TouchableOpacity onPress={showAlert}>
+      <TouchableOpacity onPress={submitData}>
         <Text style={styles.text}>click here</Text>
       </TouchableOpacity>
     </View>
